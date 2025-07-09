@@ -5,3 +5,5 @@
 5. Once the virtual machine is up, you can ssh into it using `vagrant ssh`. Once you are in the virtual machine, use the offial docker docs to instal docker engine on your ubuntu virtual machine https://docs.docker.com/engine/install/ubuntu.
 6. To give a use the ability to interact with docker without using `sudo`,you can use the following command `usermod -aG docker <your-user>`, which adds your user to the docker group.
 7. Once you are done with your virtaul machine, you can use `vagrant halt` to turn it off.
+8. You can use this as a reference to build a docker image https://docs.docker.com/reference/dockerfile/
+9. We will created 3 new repositoires in docker hub, vprofileapp, vprofiledb, and  vprofileweb
