@@ -1,0 +1,58 @@
+# Docker compose is used in mulit-container environments, check the docker compose docs for more info
+# In this docker compose file we will include 5 containers, app, db, and web containers already have Dockerfiles, 
+# while memecached and rabbitmq we will pull directly from their official images.
+
+# Services are the containers that we want to run.
+services:
+#we will build vprodb from the dockerfile, so we provide its path using "context"
+  vprodb:
+    build: 
+      context: ./Docker-files/db
+    #account/image  
+    image: mohannadmjaradat/vprofiledb
+    container_name: vprodb
+    ports:
+      - "3306:3306"
+    volumes:
+      - vprodbdata:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=vprodbpass
+
+  vprocache01:
+    #account/image  
+    image: memcached
+    ports:
+      - "5672:5672"
+    environment:
+    - RQBBITMQ_DEFAULT_USER=guest
+    - RABBITMQ_DEFAULT_PASS=guest
+
+  vpromq01:
+    #account/image  
+    image: rabbitmq
+    container_name: vprocache01
+    ports:
+      - "11211:11211"
+
+  vproapp:
+    build: 
+      context: ./Docker-files/app
+    #account/image  
+    image: mohannadmjaradat/vprofileapp
+    container_name: vproapp
+    ports:
+      - "8080:8080"
+    volumes:
+      - vprodbdata:/usr/local/tomcat/webapps
+
+  vproweb:
+    build: 
+      context: ./Docker-files/web
+    #account/image  
+    image: mohannadmjaradat/vprofileweb
+    container_name: vproweb
+    ports:
+      - "80:80"
+volumes:
+  vprodbdata: {}
+  vproappdata: {}
